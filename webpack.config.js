@@ -5,11 +5,9 @@ const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
     mode: 'development',
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     entry: {
         app: './src/app.js',
-        // core: './js/core.js',
-        // lowLag: './js/lowLag.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),

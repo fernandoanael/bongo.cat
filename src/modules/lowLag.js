@@ -127,7 +127,7 @@ var lowLag = new function(){
 				this.play = this.playSoundSM2;
 				lowLag.msg("loading SM2 from "+lowLag.sm2url);
 				soundManager.setup({ url: lowLag.sm2url, useHighPerformance:true, 
-					onready:lowLag.sm2Ready , debugMode: true, useConsole: true})
+					onready:lowLag.sm2Ready , debugMode: true})
 
 
 			break;
