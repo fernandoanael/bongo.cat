@@ -48,6 +48,10 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        }),
         new HtmlWebPackPlugin({
             template: "./src/html/index.html",
             title: "Bongo Cat"

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/fernandoanael/bongo.cat#readme",
   "dependencies": {
+    "jquery": "~3.3.1",
     "soundmanager2": "^2.97.20170602"
   },
   "devDependencies": {
