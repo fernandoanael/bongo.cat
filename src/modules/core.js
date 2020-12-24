@@ -1,9 +1,10 @@
-import {lowLag} from './lowLag'
+import { lowLag } from './lowLag'
 
 export default function () {
-  Array.prototype.remove = function(el) {
+  Array.prototype.remove = function (el) {
     return this.splice(this.indexOf(el), 1);
   }
+
   const InstrumentEnum = Object.freeze({
     BONGO: 0,
     KEYBOARD: 1,
@@ -13,6 +14,7 @@ export default function () {
     TAMBOURINE: 6,
     COWBELL: 7
   })
+
   const KeyEnum = Object.freeze({
     "A": 1,
     "D": 0,
@@ -42,6 +44,7 @@ export default function () {
     "B": 1,
     "F": 1
   })
+
   const InstrumentPerKeyEnum = Object.freeze({
     "A": InstrumentEnum.BONGO,
     "D": InstrumentEnum.BONGO,
@@ -71,11 +74,13 @@ export default function () {
     "B": InstrumentEnum.TAMBOURINE,
     "F": InstrumentEnum.COWBELL
   })
+
   const ClickKeyEquivalentEnum = Object.freeze({
     "1": "A",
     "2": " ",
     "3": "D"
   })
+
   const TapKeyEquivalentEnum = Object.freeze({
     "tap-left": {
       "BONGO": ["A"]
@@ -130,6 +135,7 @@ export default function () {
       "MARIMBA": ["P"]
     }
   })
+
   const TapKeysPerLayerEnum = Object.freeze({
     "layer-bongo": ["tap-left", "tap-right"],
     "layer-keyboard": ["tap-keys"],
@@ -139,6 +145,7 @@ export default function () {
     "layer-tambourine": ["tap-right"],
     "layer-cowbell": ["tap-right"]
   })
+
   const LayersPerInstrumentEnum = Object.freeze({
     "layer-bongo": InstrumentEnum.BONGO,
     "layer-keyboard": InstrumentEnum.KEYBOARD,
@@ -148,6 +155,7 @@ export default function () {
     "layer-tambourine": InstrumentEnum.TAMBOURINE,
     "layer-cowbell": InstrumentEnum.COWBELL
   })
+
   var pressed = [];
   var currentLayer;
   var allLayers = [];
@@ -155,8 +163,8 @@ export default function () {
     allLayers.push(...tapKeysPerInstrument);
   }
   allLayers = [...new Set(allLayers)];
-  $(document).ready(function() {
-    console.log({dirname: __dirname})
+  $(document).ready(function () {
+    console.log({ dirname: __dirname })
     lowLag.init({
       'urlPrefix': './',
       'debug': 'console'
@@ -169,25 +177,29 @@ export default function () {
     $.loadSimple("tambourine");
     $.loadSimple("cowbell");
     $.layers("layer-bongo");
-    $("select#select-instrument").on("change", function() {
+    $("select#select-instrument").on("change", function () {
       $.layers($(this).val());
     });
   });
+
   var i = 0;
-  $.loadSimple = function(file) {
+  $.loadSimple = function (file) {
     for (i = 0; i <= 1; i++) {
       lowLag.load([file + ".mp3", file + ".wav"], file + i);
     }
   }
-  $.load = function(file, start, end) {
+
+  $.load = function (file, start, end) {
     for (i = start; i <= end; i++) {
       lowLag.load([file + i + ".mp3", file + i + ".wav"], file + i);
     }
   }
-  $.wait = function(callback, ms) {
+
+  $.wait = function (callback, ms) {
     return window.setTimeout(callback, ms);
   }
-  $.play = function(instrument, key, state) {
+
+  $.play = function (instrument, key, state) {
     var instrumentName = Object.keys(InstrumentEnum).find(k => InstrumentEnum[k] === instrument).toLowerCase();
     var commonKey = KeyEnum[key];
     var id = "#" + (instrument == InstrumentEnum.MEOW ? "mouth" : "paw-" + ((instrument == InstrumentEnum.BONGO ? commonKey : commonKey <= 5 && commonKey != 0 ? 0 : 1) == 0 ? "left" : "right"));
@@ -197,7 +209,7 @@ export default function () {
       }
       pressed.push(commonKey);
       if (instrument != InstrumentEnum.MEOW) {
-        $(".instruments>div").each(function(index) {
+        $(".instruments>div").each(function (index) {
           $(this).css("visibility", ($(this).attr("id") === instrumentName) ? "visible" : "hidden");
         });
       }
@@ -208,7 +220,8 @@ export default function () {
     }
     $(id).css("background-position-x", (state ? "-800px" : "0"));
   }
-  $.layers = function(selectedLayer) {
+
+  $.layers = function (selectedLayer) {
     if (selectedLayer !== currentLayer) {
       currentLayer = selectedLayer;
       var layers = TapKeysPerLayerEnum[selectedLayer];
@@ -219,7 +232,7 @@ export default function () {
         var instrument = LayersPerInstrumentEnum[selectedLayer];
         var instrumentName = Object.keys(InstrumentEnum).find(k => InstrumentEnum[k] === instrument).toLowerCase();
         if (instrument != InstrumentEnum.MEOW) {
-          $(".instruments>div").each(function(index) {
+          $(".instruments>div").each(function (index) {
             $(this).css("visibility", ($(this).attr("id") === instrumentName) ? "visible" : "hidden");
           });
         }
@@ -232,10 +245,12 @@ export default function () {
       }
     }
   }
-  $(document).bind("contextmenu", function(e) {
+
+  $(document).bind("contextmenu", function (e) {
     e.preventDefault();
   });
-  $(document).on("mousedown mouseup", function(e) {
+
+  $(document).on("mousedown mouseup", function (e) {
     if (!window.matchMedia("(max-width: 769px)").matches && !$(e.target).is("a, a *")) {
       var keyboardEquivalent = ClickKeyEquivalentEnum[e.which];
       if (keyboardEquivalent != undefined) {
@@ -247,7 +262,8 @@ export default function () {
       }
     }
   });
-  $(document).on("keydown keyup", function(e) {
+
+  $(document).on("keydown keyup", function (e) {
     var instrument = InstrumentPerKeyEnum[e.key.toUpperCase()];
     var key = KeyEnum[e.key.toUpperCase()];
     if (instrument != undefined && key != undefined) {
@@ -255,7 +271,8 @@ export default function () {
       $.play(instrument, key, e.type === "keydown");
     }
   });
-  $(document).on("touchstart touchend", function(e) {
+
+  $(document).on("touchstart touchend", function (e) {
     if (e.target.classList.contains("layer")) {
       if (e.type === "touchstart") {
         $(e.target).addClass("highlight");
@@ -285,95 +302,112 @@ export default function () {
       }
     }
   });
-  
+
   var link_StrayRogue = "<a href=\"https://twitter.com/StrayRogue\" target=\"_blank\">@StrayRogue</a>";
   var link_DitzyFlama = "<a href=\"https://twitter.com/DitzyFlama\" target=\"_blank\">@DitzyFlama</a>";
   var link_EricHuber = "<a href=\"https://erics.site/?utm_source=bongo.cat\" target=\"_blank\">Eric Huber</a> (<a href=\"https://twitter.com/Externalizable\" target=\"_blank\">@Externalizable</a>)";
   var i18n_map = {
     "Bongos": {
       "en": "Bongos",
-      "ca": "Bongos"},
+      "ca": "Bongos"
+    },
     "Cymbal": {
       "en": "Cymbal",
-      "ca": "Plat"},
+      "ca": "Plat"
+    },
     "Cowbell": {
       "en": "Cowbell",
-      "ca": "Esquellot"},
+      "ca": "Esquellot"
+    },
     "Tambourine": {
       "en": "Tambourine",
-      "ca": "Pandereta"},
+      "ca": "Pandereta"
+    },
     "Meow": {
       "en": "Meow",
-      "ca": "Miol"},
+      "ca": "Miol"
+    },
     "SPACE": {
       "en": "SPACE",
-      "ca": "ESPAI"},
+      "ca": "ESPAI"
+    },
     "Piano": {
       "en": "Piano",
-      "ca": "Piano"},
+      "ca": "Piano"
+    },
     "Marimba": {
       "en": "Marimba",
-      "ca": "Marimba"},
+      "ca": "Marimba"
+    },
     "Keyboard": {
       "en": "Keyboard",
-      "ca": "Teclat"},
+      "ca": "Teclat"
+    },
     "LEFT": {
       "en": "LEFT",
-      "ca": "ESQUERRA"},
+      "ca": "ESQUERRA"
+    },
     "RIGHT": {
       "en": "RIGHT",
-      "ca": "DRETA"},
+      "ca": "DRETA"
+    },
     "MEOW": {
       "en": "MEOW",
-      "ca": "MIOL"},
+      "ca": "MIOL"
+    },
     "other-lang": {
       "en": "<a href=\"/?lang=ca\">En català</a>",
-      "ca": "<a href=\"/?lang=en\">In English</a>"},
+      "ca": "<a href=\"/?lang=en\">In English</a>"
+    },
     "courtesy": {
-      "en": "Art courtesy of "+link_StrayRogue,
-      "ca": "Art per cortesia de "+link_StrayRogue},
+      "en": "Art courtesy of " + link_StrayRogue,
+      "ca": "Art per cortesia de " + link_StrayRogue
+    },
     "meme": {
-      "en": "Meme by "+link_DitzyFlama,
-      "ca": "Meme de "+link_DitzyFlama},
+      "en": "Meme by " + link_DitzyFlama,
+      "ca": "Meme de " + link_DitzyFlama
+    },
     "website": {
-      "en": "Website by "+link_EricHuber,
-      "ca": "Lloc web d&#39"+link_EricHuber},
+      "en": "Website by " + link_EricHuber,
+      "ca": "Lloc web d&#39" + link_EricHuber
+    },
     "cookies": {
       "en": "This website uses cookies to analyze traffic via anonymized and aggregated data.",
-      "ca": "Aquest lloc web utilitza galetes per analitzar el trànsit mitjançant dades agregades i anonimitzades."}
+      "ca": "Aquest lloc web utilitza galetes per analitzar el trànsit mitjançant dades agregades i anonimitzades."
+    }
   };
-  
-  var supportedLanguages = {"ca": true, "en": true};
+
+  var supportedLanguages = { "ca": true, "en": true };
   function preferredLang() {
     const urlParams = new URLSearchParams(window.location.search);
     var urlLang = urlParams.get("lang");
-    if(urlLang !== null && supportedLanguages[urlLang]) {
+    if (urlLang !== null && supportedLanguages[urlLang]) {
       return urlLang;
     }
-  
+
     var langs = window.navigator.languages;
-    for(var i=0; i<langs.length; i++) {
+    for (var i = 0; i < langs.length; i++) {
       /* 2 is the length of ISO 639-1 language codes
        * which are the start of BCP-47 codes
        */
       var code = langs[i].substring(0, 2);
       var l = supportedLanguages[code];
-      if(l) {
+      if (l) {
         return code;
       }
     }
     return "en";
   };
-  
-  
+
+
   function internationalize() {
     var lang = preferredLang();
-    $("[i18n]").each(function() {
+    $("[i18n]").each(function () {
       var id = $(this).attr("i18n");
       this.innerHTML = i18n_map[id][lang];
     });
   }
+
   window.addEventListener("languagechange", internationalize);
   document.addEventListener("DOMContentLoaded", internationalize)
-  
 }
