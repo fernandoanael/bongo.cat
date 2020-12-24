@@ -166,7 +166,7 @@ export default function () {
   $(document).ready(function () {
     console.log({ dirname: __dirname })
     lowLag.init({
-      'urlPrefix': './',
+      'urlPrefix': './sounds/',
       'debug': 'console'
     });
     $.load("bongo", 0, 1);

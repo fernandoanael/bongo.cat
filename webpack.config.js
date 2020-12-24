@@ -38,17 +38,23 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif)$/i,
-                use: ['file-loader']
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'images/[name].[ext]'
+                    }
+                }
             },
         ]
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "./src/html/index.html"
+            template: "./src/html/index.html",
+            title: "Bongo Cat"
         }),
         new CopyPlugin({
             patterns: [
-                {from: "./src/sounds", to: "./"},
+                {from: "./src/sounds", to: "./sounds"},
                 {from: "./src/meta", to: "./meta"}
             ]
         })
