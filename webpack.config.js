@@ -54,7 +54,8 @@ module.exports = {
         }),
         new HtmlWebPackPlugin({
             template: "./src/html/index.html",
-            title: "Bongo Cat"
+            title: "Bongo Cat",
+            inject: 'head'
         }),
         new CopyPlugin({
             patterns: [
