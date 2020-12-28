@@ -53,7 +53,7 @@ module.exports = {
             jQuery: 'jquery'
         }),
         new HtmlWebPackPlugin({
-            template: "./src/html/index.html",
+            template: "./src/views/index.html",
             title: "Bongo Cat",
             inject: 'head'
         }),
