@@ -54,5 +54,13 @@ StrayRogue gave written permission to Externalizable on the 15th September 2018 
 
 See also the list of [contributors](https://github.com/Externalizable/bongo.cat/contributors) who participated in this project.
 
+## Local Env
+To run a local instance of the Bongo Cat you need to
+1. Node.js version equal or higher than `10.13.0`
+2. Clone the Bongo Cat repository
+3. Run `npm install`
+4. Run `npm run dev`
+5. Navigate to `http://localhost:8080` (by default Webpack will automatically try to open a Chrome tab)
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/Externalizable/bongo.cat/blob/master/LICENSE) file for details
